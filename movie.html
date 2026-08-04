@@ -2,67 +2,146 @@
 <html lang="en">
 
 <head>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Movie Details - Pixell Pulse</title>
+<title>Pixell Pulse - Movie</title>
 
 <style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
 
 body{
     background:#111;
     color:white;
-    font-family:Arial;
-    margin:0;
+    font-family:Arial, sans-serif;
 }
 
-.container{
-    padding:20px;
-    text-align:center;
-}
 
-.poster{
-    width:220px;
-    border-radius:12px;
-}
-
-h1{
-    font-size:28px;
-}
-
-.info{
-    color:#aaa;
-    margin:10px;
-}
-
-.buttons button{
-
-    display:block;
-    width:90%;
-    margin:12px auto;
+.back{
     padding:15px;
-    background:#e50914;
+}
+
+.back a{
     color:white;
-    border:none;
-    border-radius:8px;
+    text-decoration:none;
     font-size:18px;
 }
 
-.buttons button:hover{
-    background:#b20710;
+
+.container{
+    padding:20px;
 }
 
-.description{
-    text-align:left;
-    margin-top:20px;
-    color:#ccc;
+
+.movie{
+    display:flex;
+    gap:20px;
+    align-items:flex-start;
 }
+
+
+.poster{
+    width:180px;
+    aspect-ratio:2/3;
+    object-fit:cover;
+    border-radius:12px;
+}
+
+
+.details h1{
+    font-size:28px;
+    margin-bottom:10px;
+}
+
+
+.rating{
+    display:inline-block;
+    background:#f5c518;
+    color:black;
+    padding:5px 12px;
+    border-radius:20px;
+    font-weight:bold;
+}
+
+
+.info{
+    color:#aaa;
+    margin-top:12px;
+    line-height:25px;
+}
+
+
+h2{
+    margin-top:30px;
+}
+
+
+.buttons{
+    margin-top:15px;
+}
+
 
 .buttons a{
     display:block;
     text-decoration:none;
 }
-    
+
+
+.buttons button{
+
+    width:100%;
+    padding:14px;
+    margin:8px 0;
+
+    border:none;
+    border-radius:8px;
+
+    background:#e50914;
+    color:white;
+
+    font-size:17px;
+}
+
+
+.story{
+
+    margin-top:25px;
+    color:#ccc;
+    line-height:24px;
+
+}
+
+
+@media(max-width:600px){
+
+.movie{
+
+    flex-direction:column;
+    align-items:center;
+
+}
+
+.details{
+
+    text-align:center;
+
+}
+
+.poster{
+
+    width:220px;
+
+}
+
+}
+
+
 </style>
 
 </head>
@@ -71,69 +150,101 @@ h1{
 <body>
 
 
+<div class="back">
+
+<a href="index.html">← Back</a>
+
+</div>
+
+
+
 <div class="container">
 
 
-<img class="poster"
-src="https://image.tmdb.org/t/p/w500/voHUmluYmKyleFkTu3lOX3mXw.jpg">
+<div class="movie">
 
+
+<img class="poster"
+src="https://image.tmdb.org/t/p/w500/8cdWjvZQUExUUTzyp4t6EDMubfO.jpg">
+
+
+
+<div class="details">
 
 <h1>Loki</h1>
 
 
+<div class="rating">
+⭐ 8.2
+</div>
+
+
 <div class="info">
+
 2021 • Web Series<br>
-⭐ IMDb Rating 8.2
+
+Hindi • English<br>
+
+Action • Fantasy
+
 </div>
 
 
-<div class="description">
+</div>
 
-<b>Languages:</b>
+
+</div>
+
+
+
+
+<h2>Download</h2>
+
+
+
+<div class="buttons">
+
+
+<a href="https://t.me/Gomzybot?start=getfile-Loki-480p">
+<button>480p</button>
+</a>
+
+
+<a href="https://t.me/Gomzybot?start=getfile-Loki-720p">
+<button>720p</button>
+</a>
+
+
+<a href="https://t.me/Gomzybot?start=getfile-Loki-1080p">
+<button>1080p</button>
+</a>
+
+
+<a href="https://t.me/Gomzybot?start=getfile-Loki-2160p">
+<button>2160p</button>
+</a>
+
+
+</div>
+
+
+
+
+<div class="story">
+
+<h2>Story</h2>
+
 <br>
-Hindi | English | Tamil
 
-<br><br>
-
-<b>Available Formats:</b>
-
-</div>
-
-
-<div class="buttons">
-
-<div class="buttons">
-
-<a href="https://t.me/Gomzybot?start=getfile-Loki-480p" target="_blank">
-    <button>480p</button>
-</a>
-
-<a href="https://t.me/Gomzybot?start=getfile-Loki-720p" target="_blank">
-    <button>720p</button>
-</a>
-
-<a href="https://t.me/Gomzybot?start=getfile-Loki-1080p" target="_blank">
-    <button>1080p</button>
-</a>
-
-<a href="https://t.me/Gomzybot?start=getfile-Loki-2160p" target="_blank">
-    <button>2160p</button>
-</a>
-
-</div>
-
-
-<div class="description">
-
-<b>Story:</b>
-<br><br>
 Loki returns in a new adventure across time and space.
 
 </div>
+
 
 
 </div>
 
 
 </body>
+
 </html>
