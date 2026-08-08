@@ -1,0 +1,781 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Pixell Pulse</title>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+    background:#111;
+    color:#fff;
+    font-family:Arial,Helvetica,sans-serif;
+}
+
+/* HEADER */
+header{
+    padding:18px 15px;
+    text-align:center;
+    font-size:27px;
+    font-weight:bold;
+    background:#000;
+    position:sticky;
+    top:0;
+    z-index:100;
+}
+
+/* SEARCH */
+.search{
+    padding:14px 12px;
+    background:#111;
+    position:sticky;
+    top:67px;
+    z-index:99;
+}
+
+.search input{
+    width:100%;
+    max-width:650px;
+    display:block;
+    margin:auto;
+    padding:13px 20px;
+    border-radius:25px;
+    border:1px solid #333;
+    background:#222;
+    color:#fff;
+    font-size:16px;
+    outline:none;
+}
+
+.search input:focus{
+    border-color:#00ff88;
+}
+
+/* CATEGORIES */
+.categories{
+    display:flex;
+    gap:9px;
+    padding:10px 12px 15px;
+    overflow-x:auto;
+}
+
+.categories::-webkit-scrollbar{
+    display:none;
+}
+
+.filter-btn{
+    background:#222;
+    color:#fff;
+    border:1px solid #444;
+    padding:8px 17px;
+    border-radius:20px;
+    white-space:nowrap;
+    cursor:pointer;
+    font-size:13px;
+}
+
+.filter-btn.active{
+    background:#00ff88;
+    color:#000;
+    border-color:#00ff88;
+    font-weight:bold;
+}
+
+/* MOVIE GRID */
+.movies{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:14px;
+    padding:12px;
+}
+
+@media(min-width:600px){
+    .movies{
+        grid-template-columns:repeat(3,1fr);
+    }
+}
+
+@media(min-width:900px){
+    .movies{
+        grid-template-columns:repeat(5,1fr);
+        padding:20px;
+    }
+}
+
+/* CARD */
+.card{
+    background:#1b1b1b;
+    border-radius:11px;
+    overflow:hidden;
+    border:1px solid #292929;
+    transition:.2s;
+}
+
+.card:hover{
+    transform:translateY(-4px);
+    border-color:#00ff88;
+}
+
+/* POSTER */
+.poster-wrap{
+    width:100%;
+    aspect-ratio:2/3;
+    background:#222;
+    position:relative;
+    overflow:hidden;
+}
+
+.poster{
+    width:100%;
+    height:100%;
+    display:block;
+    object-fit:cover;
+}
+
+/* FALLBACK POSTER */
+.poster-fallback{
+    width:100%;
+    height:100%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    padding:15px;
+    background:linear-gradient(145deg,#202020,#090909);
+    color:#aaa;
+    font-size:17px;
+    font-weight:bold;
+}
+
+/* INFO */
+.info{
+    padding:10px;
+}
+
+.info h3{
+    font-size:14px;
+    line-height:19px;
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+}
+
+.meta{
+    color:#999;
+    font-size:11px;
+    margin-top:4px;
+}
+
+/* QUALITY */
+.qualities{
+    display:flex;
+    flex-wrap:wrap;
+    gap:5px;
+    margin-top:9px;
+}
+
+.quality-btn{
+    flex:1;
+    min-width:42px;
+    background:#00ff88;
+    color:#000;
+    border:0;
+    border-radius:5px;
+    padding:7px 5px;
+    font-size:11px;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+.quality-btn:hover{
+    background:#00cc6d;
+}
+
+/* SERIES */
+.seasons{
+    margin-top:9px;
+}
+
+.season{
+    margin-bottom:7px;
+}
+
+.season-title{
+    font-size:11px;
+    color:#aaa;
+    margin-bottom:5px;
+}
+
+/* LOADING */
+.loading{
+    grid-column:1/-1;
+    text-align:center;
+    padding:60px 20px;
+    color:#aaa;
+}
+
+.spinner{
+    width:35px;
+    height:35px;
+    border:3px solid #333;
+    border-top-color:#00ff88;
+    border-radius:50%;
+    animation:spin .8s linear infinite;
+    margin:0 auto 15px;
+}
+
+@keyframes spin{
+    to{transform:rotate(360deg);}
+}
+
+/* ERROR */
+.error{
+    grid-column:1/-1;
+    text-align:center;
+    padding:50px 20px;
+    color:#ff5555;
+}
+
+/* EMPTY */
+.empty{
+    grid-column:1/-1;
+    text-align:center;
+    padding:50px 20px;
+    color:#888;
+}
+
+/* TOP COUNT */
+.count{
+    padding:0 15px 8px;
+    color:#777;
+    font-size:12px;
+}
+</style>
+</head>
+
+<body>
+
+<header>🎬 Pixell Pulse</header>
+
+<div class="search">
+    <input
+        id="searchInput"
+        type="search"
+        placeholder="Search Movies & Series..."
+        autocomplete="off"
+    >
+</div>
+
+<div class="categories">
+
+    <button
+        class="filter-btn active"
+        data-type="all">
+        All
+    </button>
+
+    <button
+        class="filter-btn"
+        data-type="Movie">
+        Movies
+    </button>
+
+    <button
+        class="filter-btn"
+        data-type="Series">
+        Web Series
+    </button>
+
+</div>
+
+<div class="count" id="count"></div>
+
+<div class="movies" id="moviesGrid">
+
+    <div class="loading">
+        <div class="spinner"></div>
+        Loading movies...
+    </div>
+
+</div>
+
+
+<script>
+
+/* =========================================================
+   PIXELL PULSE API
+   ========================================================= */
+
+const API_URL =
+"https://professional-belinda-durgesh-b54aafa3.koyeb.app/movies";
+
+
+/* =========================================================
+   TELEGRAM BOT
+   ========================================================= */
+
+const TELEGRAM_BOT =
+"https://t.me/Gomzybot";
+
+
+/* =========================================================
+   VARIABLES
+   ========================================================= */
+
+let allMovies = [];
+let currentType = "all";
+let currentSearch = "";
+
+
+/* =========================================================
+   HTML ESCAPE
+   ========================================================= */
+
+function escapeHTML(value){
+
+    if(value === null || value === undefined){
+        return "";
+    }
+
+    return String(value)
+        .replace(/&/g,"&amp;")
+        .replace(/</g,"&lt;")
+        .replace(/>/g,"&gt;")
+        .replace(/"/g,"&quot;")
+        .replace(/'/g,"&#039;");
+}
+
+
+/* =========================================================
+   TELEGRAM LINK
+   ========================================================= */
+
+function telegramLink(title, quality){
+
+    const text =
+        "getfile-" +
+        title +
+        "-" +
+        quality;
+
+    return TELEGRAM_BOT +
+        "?start=" +
+        encodeURIComponent(text);
+}
+
+
+/* =========================================================
+   POSTER
+   =========================================================
+   
+   Current API does not return TMDB poster path.
+   Therefore a clean portrait fallback is generated.
+   If API later sends movie.poster, it will automatically
+   use that poster.
+   ========================================================= */
+
+function createPoster(movie){
+
+    if(movie.poster && movie.poster.trim() !== ""){
+
+        return `
+        <img
+            class="poster"
+            src="${escapeHTML(movie.poster)}"
+            alt="${escapeHTML(movie.title)}"
+            loading="lazy"
+            onerror="this.style.display='none';this.nextElementSibling.style.display='flex';"
+        >
+        <div
+            class="poster-fallback"
+            style="display:none">
+            🎬<br>
+            ${escapeHTML(movie.title)}
+        </div>
+        `;
+    }
+
+    return `
+    <div class="poster-fallback">
+        🎬<br>
+        ${escapeHTML(movie.title)}
+    </div>
+    `;
+}
+
+
+/* =========================================================
+   QUALITY BUTTONS
+   ========================================================= */
+
+function qualityButtons(title, qualities){
+
+    if(!qualities || !qualities.length){
+        return "";
+    }
+
+    return `
+    <div class="qualities">
+
+        ${
+            qualities.map(function(q){
+
+                return `
+                <button
+                    class="quality-btn"
+                    onclick="openTelegram(${JSON.stringify(title)},${JSON.stringify(q)})">
+                    ${escapeHTML(q)}
+                </button>
+                `;
+
+            }).join("")
+        }
+
+    </div>
+    `;
+}
+
+
+/* =========================================================
+   OPEN TELEGRAM
+   ========================================================= */
+
+function openTelegram(title, quality){
+
+    const url = telegramLink(
+        title,
+        quality
+    );
+
+    window.open(
+        url,
+        "_blank"
+    );
+}
+
+
+/* =========================================================
+   SERIES SEASONS
+   ========================================================= */
+
+function renderSeasons(movie){
+
+    if(
+        movie.type !== "Series" ||
+        !movie.seasons ||
+        !movie.seasons.length
+    ){
+        return "";
+    }
+
+    return `
+    <div class="seasons">
+
+        ${
+            movie.seasons.map(function(season){
+
+                return `
+                <div class="season">
+
+                    <div class="season-title">
+                        Season ${escapeHTML(season.season)}
+                    </div>
+
+                    ${
+                        qualityButtons(
+                            movie.title,
+                            season.qualities || []
+                        )
+                    }
+
+                </div>
+                `;
+
+            }).join("")
+        }
+
+    </div>
+    `;
+}
+
+
+/* =========================================================
+   MOVIE CARD
+   ========================================================= */
+
+function movieCard(movie){
+
+    const title =
+        escapeHTML(movie.title || "Unknown");
+
+    const year =
+        movie.year || "";
+
+    const type =
+        escapeHTML(movie.type || "Movie");
+
+    return `
+    <div class="card">
+
+        <div class="poster-wrap">
+
+            ${createPoster(movie)}
+
+        </div>
+
+        <div class="info">
+
+            <h3 title="${title}">
+                ${title}
+            </h3>
+
+            <div class="meta">
+                ${year ? escapeHTML(year) + " • " : ""}
+                ${type}
+            </div>
+
+            ${
+                movie.type === "Series"
+                ? renderSeasons(movie)
+                : qualityButtons(
+                    movie.title || "",
+                    movie.qualities || []
+                )
+            }
+
+        </div>
+
+    </div>
+    `;
+}
+
+
+/* =========================================================
+   RENDER
+   ========================================================= */
+
+function renderMovies(movies){
+
+    const grid =
+        document.getElementById("moviesGrid");
+
+    const count =
+        document.getElementById("count");
+
+    if(!movies || movies.length === 0){
+
+        grid.innerHTML = `
+            <div class="empty">
+                😕 No movies found
+            </div>
+        `;
+
+        count.textContent = "";
+
+        return;
+    }
+
+    count.textContent =
+        movies.length + " titles";
+
+    grid.innerHTML =
+        movies
+        .map(movieCard)
+        .join("");
+}
+
+
+/* =========================================================
+   FILTER + SEARCH
+   ========================================================= */
+
+function applyFilters(){
+
+    let filtered =
+        [...allMovies];
+
+    /* Category */
+
+    if(currentType !== "all"){
+
+        filtered =
+            filtered.filter(function(movie){
+
+                return movie.type === currentType;
+
+            });
+
+    }
+
+    /* Search */
+
+    if(currentSearch){
+
+        filtered =
+            filtered.filter(function(movie){
+
+                return (
+                    movie.title &&
+                    movie.title
+                    .toLowerCase()
+                    .includes(currentSearch)
+                );
+
+            });
+
+    }
+
+    renderMovies(filtered);
+}
+
+
+/* =========================================================
+   FETCH MOVIES
+   ========================================================= */
+
+async function fetchMovies(){
+
+    const grid =
+        document.getElementById("moviesGrid");
+
+    grid.innerHTML = `
+        <div class="loading">
+            <div class="spinner"></div>
+            Loading movies...
+        </div>
+    `;
+
+    try{
+
+        const response =
+            await fetch(
+                API_URL + "?t=" + Date.now(),
+                {
+                    cache:"no-store"
+                }
+            );
+
+        if(!response.ok){
+
+            throw new Error(
+                "API Error " +
+                response.status
+            );
+
+        }
+
+        const data =
+            await response.json();
+
+        if(!Array.isArray(data)){
+
+            throw new Error(
+                "Invalid API response"
+            );
+
+        }
+
+        allMovies = data;
+
+        applyFilters();
+
+    }
+    catch(error){
+
+        console.error(
+            "Pixell Pulse API:",
+            error
+        );
+
+        grid.innerHTML = `
+            <div class="error">
+
+                ❌ API se connect nahi ho pa raha
+
+                <br><br>
+
+                <small>
+                    ${escapeHTML(error.message)}
+                </small>
+
+            </div>
+        `;
+    }
+}
+
+
+/* =========================================================
+   SEARCH
+   ========================================================= */
+
+document
+.getElementById("searchInput")
+.addEventListener(
+    "input",
+    function(event){
+
+        currentSearch =
+            event.target.value
+            .trim()
+            .toLowerCase();
+
+        applyFilters();
+
+    }
+);
+
+
+/* =========================================================
+   CATEGORY BUTTONS
+   ========================================================= */
+
+document
+.querySelectorAll(".filter-btn")
+.forEach(function(button){
+
+    button.addEventListener(
+        "click",
+        function(){
+
+            document
+            .querySelectorAll(".filter-btn")
+            .forEach(function(btn){
+
+                btn.classList.remove(
+                    "active"
+                );
+
+            });
+
+            this.classList.add(
+                "active"
+            );
+
+            currentType =
+                this.dataset.type;
+
+            applyFilters();
+
+        }
+    );
+
+});
+
+
+/* =========================================================
+   START
+   ========================================================= */
+
+fetchMovies();
+
+</script>
+
+</body>
+</html>
